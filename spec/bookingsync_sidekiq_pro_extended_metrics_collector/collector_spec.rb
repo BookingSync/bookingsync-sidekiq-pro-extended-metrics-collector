@@ -14,8 +14,8 @@ RSpec.describe BookingsyncSidekiqProExtendedMetricsCollector::Collector do
           @registry = []
         end
 
-        def gauge(name, value)
-          @registry << { name => value }
+        def gauge(name, value, tags: [])
+          @registry << { name => [value, tags] }
         end
       end.new
     end
@@ -29,8 +29,10 @@ RSpec.describe BookingsyncSidekiqProExtendedMetricsCollector::Collector do
     let(:critical_queue) { double(:critical_queue, latency: 1.21) }
     let(:expected_result) do
       [
-        { "sidekiq.metrics_collector.queue_latency.default" => 5.73 },
-        { "sidekiq.metrics_collector.queue_latency.critical" => 1.21 }
+        { "sidekiq.metrics_collector.queue_latency" => [5.73, ["queue:default"]] },
+        { "sidekiq.metrics_collector.queue_latency.default" => [5.73, []] },
+        { "sidekiq.metrics_collector.queue_latency" => [1.21, ["queue:critical"]] },
+        { "sidekiq.metrics_collector.queue_latency.critical" => [1.21, []] }
       ]
     end
 
@@ -59,8 +61,8 @@ RSpec.describe BookingsyncSidekiqProExtendedMetricsCollector::Collector do
           @registry = []
         end
 
-        def gauge(name, value)
-          @registry << { name => value }
+        def gauge(name, value, tags: [])
+          @registry << { name => [value, tags] }
         end
       end.new
     end
@@ -72,7 +74,8 @@ RSpec.describe BookingsyncSidekiqProExtendedMetricsCollector::Collector do
     let(:default_queue) { double(:default_queue, latency: 5.73) }
     let(:expected_result) do
       [
-        { "sidekiq.metrics_collector.queue_latency.default" => 5.73 },
+        { "sidekiq.metrics_collector.queue_latency" => [5.73, ["queue:default"]] },
+        { "sidekiq.metrics_collector.queue_latency.default" => [5.73, []] }
       ]
     end
 
