@@ -1,0 +1,39 @@
+
+version: 2
+jobs:
+  build:
+    working_directory: ~/BookingSync/bookingsync-sidekiq-pro-extended-metrics-collector
+    parallelism: 1
+    docker:
+      - image: circleci/ruby:2.6.5-node
+      - image: redis
+    steps:
+      - checkout
+      - run: mkdir /tmp/circleci-test-results
+      - restore_cache:
+          keys:
+            - v1-gemfile-lock-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Install bundler
+          command: gem install bundler
+      - run:
+          name: Installing dependencies
+          command: bundle check --path=vendor/bundle || bundle install --path=vendor/bundle --jobs 4 --retry 3
+      - save_cache:
+          key: v1-gemfile-lock-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+            - ~/.bundle
+      - run:
+          name: Installing dockerize
+          command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+          environment:
+            DOCKERIZE_VERSION: v0.6.1
+      - run:
+          name: Running specs
+          command: |
+            bundle exec rake
+          environment:
+            REDIS_URL: redis://localhost:6379/1
+      - store_test_results:
+          path: /tmp/circleci-test-results
