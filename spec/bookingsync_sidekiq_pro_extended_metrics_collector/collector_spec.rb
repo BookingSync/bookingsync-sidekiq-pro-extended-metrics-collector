@@ -1,0 +1,45 @@
+require "sidekiq"
+
+RSpec.describe BookingsyncSidekiqProExtendedMetricsCollector::Collector do
+  describe "#collect_queue_latency" do
+    subject(:collect_queue_latency) do
+      described_class.new(datadog_client, configuration).collect_queue_latency("default")
+    end
+
+    let(:datadog_client) do
+      Class.new do
+        attr_reader :registry
+
+        def initialize
+          @registry = []
+        end
+
+        def gauge(name, value, tags: [])
+          @registry << { name => [value, tags] }
+        end
+      end.new
+    end
+    let(:configuration) do
+      BookingsyncSidekiqProExtendedMetricsCollector::Configuration.new.tap do |config|
+        config.datadog_namespace = "metrics_collector"
+      end
+    end
+    let(:default_queue) { double(:default_queue, latency: 5.73) }
+    let(:expected_result) do
+      [
+        { "sidekiq.metrics_collector.queue_latency" => [5.73, ["queue:default"]] },
+        { "sidekiq.metrics_collector.queue_latency.default" => [5.73, []] }
+      ]
+    end
+
+    before do
+      allow(Sidekiq::Queue).to receive(:new).with("default") { default_queue }
+    end
+
+    it "it collects latency metrics for specified queue" do
+      expect {
+        collect_queue_latency
+      }.to change { datadog_client.registry }.from([]).to(expected_result)
+    end
+  end
+end
