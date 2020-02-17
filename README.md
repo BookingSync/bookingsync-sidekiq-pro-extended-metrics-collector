@@ -27,9 +27,9 @@ Add this to the initializer:
 ``` rb
 Rails.application.config.to_prepare do
   BookingsyncSidekiqProExtendedMetricsCollector.configure do |config|
-      config.datadog_host = ENV.fetch("SYNCED_DATADOG_HOST")
-      config.datadog_port = ENV.fetch("SYNCED_DATADOG_PORT")
-      config.datadog_namespace = ENV.fetch("SYNCED_DATADOG_NAMESPACE")
+      config.datadog_host = ENV.fetch("DATADOG_HOST")
+      config.datadog_port = ENV.fetch("DATADOG_PORT")
+      config.datadog_namespace = ENV.fetch("DATADOG_NAMESPACE")
   end
 end
 ```
