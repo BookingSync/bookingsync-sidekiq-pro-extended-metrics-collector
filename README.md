@@ -1,8 +1,6 @@
-# Bookingsync::Sidekiq::Pro::Extended::Metrics::Collector
+# BookingsyncSidekiqProExtendedMetricsCollector
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/bookingsync/sidekiq/pro/extended/metrics/collector`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A gem for collecting extra Sidekiq metrics and aggregating them in Datadog.
 
 ## Installation
 
@@ -22,7 +20,35 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Configuration
+
+Add this to the initializer:
+
+``` rb
+Rails.application.config.to_prepare do
+  BookingsyncSidekiqProExtendedMetricsCollector.configure do |config|
+      config.datadog_host = ENV.fetch("SYNCED_DATADOG_HOST")
+      config.datadog_port = ENV.fetch("SYNCED_DATADOG_PORT")
+      config.datadog_namespace = ENV.fetch("SYNCED_DATADOG_NAMESPACE")
+  end
+end
+```
+
+### Queues' latencies
+
+Add this Sidekiq middleware in the Sidekiq config:
+
+``` rb
+Sidekiq.configure_server do |config|
+  config.server_middleware do |chain|
+    if Rails.env.production?
+      chain.add BookingsyncSidekiqProExtendedMetricsCollector::SidekiqQueueLatencyMiddleware
+    end
+  end
+end
+```
+
+That will be enough to start collecting metrics for queues' latencies. You can perform a search based on a given namespace like `bookingsync.production`, `queue_latency` and `sidekiq` keywords. The metrics are aggregated "globally" (where queue name is used a tag) and separtely by each queue.
 
 ## Development
 
