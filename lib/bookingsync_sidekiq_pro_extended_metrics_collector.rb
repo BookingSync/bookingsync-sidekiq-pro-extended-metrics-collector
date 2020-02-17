@@ -17,10 +17,6 @@ class BookingsyncSidekiqProExtendedMetricsCollector
     Datadog::Statsd.new(configuration.datadog_host, configuration.datadog_port)
   end
 
-  def self.collect_queues_latency
-    collector.collect_queues_latency
-  end
-
   def self.collect_queue_latency(queue)
     collector.collect_queue_latency(queue)
   end

@@ -15,10 +15,6 @@ class BookingsyncSidekiqProExtendedMetricsCollector
       @configuration = configuration
     end
 
-    def collect_queues_latency
-      configuration.sidekiq_queues.each(&method(:collect_queue_latency))
-    end
-
     def collect_queue_latency(queue)
       queue = queue.to_s
       latency = Sidekiq::Queue.new(queue).latency

@@ -39,16 +39,6 @@ RSpec.describe BookingsyncSidekiqProExtendedMetricsCollector do
     it { is_expected.to be_instance_of Datadog::Statsd }
   end
 
-  describe ".collect_queues_latency" do
-    subject(:collect_queues_latency) { described_class.collect_queues_latency }
-
-    it "calls BookingsyncSidekiqProExtendedMetricsCollector::Collector#collect_queues_latency" do
-      expect_any_instance_of(BookingsyncSidekiqProExtendedMetricsCollector::Collector).to receive(:collect_queues_latency)
-
-      collect_queues_latency
-    end
-  end
-
   describe ".collect_queue_latency" do
     subject(:collect_queue_latency) { described_class.collect_queue_latency(queue) }
 

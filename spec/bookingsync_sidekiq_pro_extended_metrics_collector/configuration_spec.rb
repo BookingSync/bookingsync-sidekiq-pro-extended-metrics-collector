@@ -28,14 +28,4 @@ RSpec.describe BookingsyncSidekiqProExtendedMetricsCollector::Configuration do
       }.to change { config.datadog_namespace }.from(nil).to(:datadog_namespace)
     end
   end
-
-  describe "sidekiq_queues" do
-    subject(:config) { described_class.new }
-
-    it "is an attr accessor with a default as an empty array" do
-      expect {
-        config.sidekiq_queues = [:default]
-      }.to change { config.sidekiq_queues }.from([]).to([:default])
-    end
-  end
 end
