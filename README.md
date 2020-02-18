@@ -36,19 +36,25 @@ end
 
 ### Queues' latencies
 
-Add this Sidekiq middleware in the Sidekiq config:
+Add these Sidekiq middlewares in the Sidekiq config:
 
 ``` rb
 Sidekiq.configure_server do |config|
   config.server_middleware do |chain|
     if Rails.env.production?
       chain.add BookingsyncSidekiqProExtendedMetricsCollector::SidekiqQueueLatencyMiddleware
+      chain.add BookingsyncSidekiqProExtendedMetricsCollector::SidekiqScheduledMiddleware
+      chain.add BookingsyncSidekiqProExtendedMetricsCollector::SidekiqRetryMiddleware
     end
   end
 end
 ```
 
-That will be enough to start collecting metrics for queues' latencies. You can perform a search based on a given namespace like `bookingsync.production`, `queue_latency` and `sidekiq` keywords. The metrics are aggregated "globally" (where queue name is used a tag) and separtely by each queue.
+That will be enough to start collecting metrics for queues' latencies, retry count and scheduled count. 
+
+You can perform a search based on a given namespace like `bookingsync.production`, `queue_latency`, `retry_count`, `scheduled_count` and `sidekiq` keywords. 
+
+For latency, the metrics are aggregated "globally" (where queue name is used a tag) and separately by each queue.
 
 ## Development
 
