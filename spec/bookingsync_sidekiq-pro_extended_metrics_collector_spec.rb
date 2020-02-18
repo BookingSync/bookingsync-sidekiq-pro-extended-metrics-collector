@@ -51,4 +51,28 @@ RSpec.describe BookingsyncSidekiqProExtendedMetricsCollector do
       collect_queue_latency
     end
   end
+
+  describe ".collect_retry_count" do
+    subject(:collect_retry_count) { described_class.collect_retry_count }
+
+    let(:queue) { "default" }
+
+    it "calls BookingsyncSidekiqProExtendedMetricsCollector::Collector#collect_queue_latency" do
+      expect_any_instance_of(BookingsyncSidekiqProExtendedMetricsCollector::Collector).to receive(:collect_retry_count)
+
+      collect_retry_count
+    end
+  end
+
+  describe ".collect_scheduled_count" do
+    subject(:collect_scheduled_count) { described_class.collect_scheduled_count }
+
+    let(:queue) { "default" }
+
+    it "calls BookingsyncSidekiqProExtendedMetricsCollector::Collector#collect_scheduled_count" do
+      expect_any_instance_of(BookingsyncSidekiqProExtendedMetricsCollector::Collector).to receive(:collect_scheduled_count)
+
+      collect_scheduled_count
+    end
+  end
 end
