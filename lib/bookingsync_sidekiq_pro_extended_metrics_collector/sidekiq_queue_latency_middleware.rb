@@ -1,8 +1,8 @@
 class BookingsyncSidekiqProExtendedMetricsCollector
   class SidekiqQueueLatencyMiddleware
     def call(_worker, _job, queue)
-      BookingsyncSidekiqProExtendedMetricsCollector.collect_queue_latency(queue)
       yield
+      BookingsyncSidekiqProExtendedMetricsCollector.collect_queue_latency(queue)
     end
   end
 end
