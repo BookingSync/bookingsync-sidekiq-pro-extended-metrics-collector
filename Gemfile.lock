@@ -3,7 +3,7 @@ PATH
   specs:
     bookingsync-sidekiq-pro-extended-metrics-collector (0.1.0)
       dogstatsd-ruby (~> 4)
-      sidekiq (~> 5)
+      sidekiq (>= 5)
 
 GEM
   remote: https://rubygems.org/
@@ -45,4 +45,4 @@ DEPENDENCIES
   rspec (~> 3.0)
 
 BUNDLED WITH
-   2.0.2
+   2.1.4
