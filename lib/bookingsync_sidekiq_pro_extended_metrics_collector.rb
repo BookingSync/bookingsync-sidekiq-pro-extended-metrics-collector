@@ -16,7 +16,7 @@ class BookingsyncSidekiqProExtendedMetricsCollector
   end
 
   def self.datadog_stats_client
-    Datadog::Statsd.new(configuration.datadog_host, configuration.datadog_port)
+    Datadog::Statsd.new(configuration.datadog_host, configuration.datadog_port, tags: ["host:disabled"])
   end
 
   def self.collect_queue_latency(queue)
@@ -36,4 +36,3 @@ class BookingsyncSidekiqProExtendedMetricsCollector
   end
   private_class_method :collector
 end
-
