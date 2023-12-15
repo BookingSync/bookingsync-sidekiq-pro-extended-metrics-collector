@@ -50,9 +50,9 @@ Sidekiq.configure_server do |config|
 end
 ```
 
-That will be enough to start collecting metrics for queues' latencies, retry count and scheduled count. 
+That will be enough to start collecting metrics for queues' latencies, retry count and scheduled count.
 
-You can perform a search based on a given namespace like `bookingsync.production`, `queue_latency`, `retry_count`, `scheduled_count` and `sidekiq` keywords. 
+You can perform a search based on a given namespace like `bookingsync.production`, `queue_latency`, `retry_count`, `scheduled_count` and `sidekiq` keywords.
 
 For latency, the metrics are aggregated "globally" (where queue name is used a tag) and separately by each queue.
 
@@ -64,7 +64,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/bookingsync-sidekiq-pro-extended-metrics-collector.
+Bug reports and pull requests are welcome on GitHub at https://github.com/BookingSync/bookingsync-sidekiq-pro-extended-metrics-collector.
 
 ## License
 
